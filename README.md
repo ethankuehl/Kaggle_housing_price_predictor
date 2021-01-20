@@ -1,6 +1,6 @@
 # Predicting the Price of a Home in Ames, Iowa
 
-### [Video Presentation](https://youtu.be/AEU4Is8wH0s)
+### [Video Presentation](https://youtu.be/r0wYnZ40hLs)
 
 ##  Problem Statement
 
