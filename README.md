@@ -1,5 +1,7 @@
 # Predicting the Price of a Home in Ames, Iowa
 
+### [Video Presentatio](https://youtu.be/AEU4Is8wH0s)
+
 ##  Problem Statement
 
 [Home appraisals](https://www.investopedia.com/articles/pf/12/home-appraisals.asp) are almost always used in home purchase and sale transactions as well as in mortgage refinancing. Appraisers within a given financial institution will utilize the same [checklist](https://www.americanfinancing.net/mortgage-basics/home-appraisal-checklist) for conducting home value comparisons in a given area. This project aims to use linear regression to aid home appraisers in Ames, Iowa determine an accurate home value based on responses to the appraisal checklist used in the Ames, Iowa Housing dataset. 
