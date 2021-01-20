@@ -1,184 +1,64 @@
-# Project 2 - Ames Housing Data and Kaggle Challenge
+# Predicting the Price of a Home in Ames, Iowa
 
-Welcome to Project 2! It's time to start modeling.
+##  Problem Statement
 
-**Primary Learning Objectives:**
+[Home appraisals](https://www.investopedia.com/articles/pf/12/home-appraisals.asp) are almost always used in home purchase and sale transactions as well as in mortgage refinancing. Appraisers within a given financial institution will utilize the same [checklist](https://www.americanfinancing.net/mortgage-basics/home-appraisal-checklist) for conducting home value comparisons in a given area. This project aims to use linear regression to aid home appraisers in Ames, Iowa determine an accurate home value based on responses to the appraisal checklist used in the Ames, Iowa Housing dataset. 
 
-1. Create and refine a regression model
-2. Using [Kaggle](https://www.kaggle.com/) to practice the modeling process
-3. Providing business insights through reporting and presentation.
+## Background
 
-You are tasked with creating a regression model based on the Ames Housing Dataset. This model will predict the price of a house at sale.
+Real Estate appraisal has become a standardized practice in the home market. However, the influence of [socioeconomic and demographic factors](https://www.nytimes.com/2020/08/25/realestate/blacks-minorities-appraisals-discrimination.html) on an appraiser's final evaluation has recently called lead to questions as to whether this practice is truly objective. My project aims to provide an an accurate and objective measure of a home's value for an appraiser to take into consideration when evaluating the price of a home.  
 
-The Ames Housing Dataset is an exceptionally detailed and robust dataset with over 70 columns of different features relating to houses.
+## Data 
+[Ames, Iowa Housing dataset](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt) provides a checklist of features home appraisers utilize to determine a home's final value along with the price the home sold at.
+* 2051 samples and 81 Features in original dataset
+* [Dataset source](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) was from a Kaggle competition on predicting the price of a home. 
+* The target value was home sale price. The target was predicted using linear regression. 
+* [Data Dictionary](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt)
+![Sale_price_dist](./figures/sal_price_dis.png)
+* Home sale price distribution. From this histogram, I was able to identify that sale price needed to be power transformed for linear regression. 
+![outlier_identification](./figures/neighborhood_average_price.png)
+* This bar chart highlights the importance of location on the sale price of a home. 
 
-Secondly, we are hosting a competition on Kaggle to give you the opportunity to practice the following skills:
+## Summary
+* EDA and Data Cleaning
+    * Addressed outliers that were skewing the data. 
+        * Improved the accuracy of my linear regression
+    * Imputed values for null numerical observations
+        * Median year for the garage_yr_blt and 0 for all other numerical values
+        * Nulls in categorical values were addressed in one-hot encoding process
+    * Evaluated whether power transforming sale price would improve regression
+        * Yes, it increases the overall R2 of my predictors 
+    * One-hot encoded categorical variables
+        * Allowed me to perform linear regression analysis on them
+* Pre-processing
+    * Created interaction terms to make predictor matrix more rank efficient 
+* Modeling
+    * Created 6 unique models to identify optimized production model. 
+    * Evaluated which model performed best with R2 and Root Mean Squared Error while taking into consideration performance (time taken to predict values). 
+    * Determined that linear regression with lasso features was the most production ready model for home appraisers to use in real life due to its lower variance error and higher performance compared to the more accurate overfit linear regression. 
 
-- Refining models over time
-- Use of train-test split, cross-validation, and data with unknown values for the target to simulate the modeling process
-- The use of Kaggle as a place to practice data science
+## Conclusions
+|Model|R2|RMSE|
+|---|---|---|
+|Baseline|-0.0109|77569.287|
+|Linear Regression|0.8717|27627.700|
+|Overfit Linear regression|.9318|20146.007|
+|Lasso Linear Regression|0.90409|23893.298|
+|Ridge Linear Regression|0.9052|23755.216|
+|Linear Regression (Lasso Features)|0.9304|20351.755|
 
-As always, you will be submitting a technical report and a presentation. **You may find that the best model for Kaggle is not the best model to address your data science problem.**
+* With an R2 of 0.9304 and a root mean squared error of 20351.76 dollars, I would recommend that home appraisers use my linear regression with lasso features model when considering the value of a home in the city of Ames, Iowa. 
+    * The R2 tells us that 93%  of the variance in the price a home sells for is accounted for by my model.  
+    * The root mean squared error of 20,351.76 dollars is only 11% of the mean home value in Ames, Iowa. 
+    * Together, the statistics signify that my production model is a substantial asset to home appraisers when objectively identifying the value of a home.
+    * Important caveats: 
+        * Appraisers have to be using the same home appraisal checklist as the Ames, Iowa Housing dataset. 
+        * This model was designed specifically for the city of Ames, Iowa. It cannot be generalized to other cities in Iowa, much less other states.  
+        
+* Important information for home appraisers
+    * Location matters when appraising a home: you cannot justify the price of a home based on its inherent qualities alone. 
 
-## Set-up
+## Future Steps
 
-Before you begin working on this project, please do the following:
-
-1. Sign up for an account on [Kaggle](https://www.kaggle.com/)
-2. **IMPORTANT**: Click this link ([Regression Challenge Sign Up](https://www.kaggle.com/t/1d1c877576ac4ebb8652a8b8063efa87)) to **join** the competition (otherwise you will not be able to make submissions!)
-3. Review the material on the [DSIR-20201214-E Regression Challenge](https://www.kaggle.com/c/dsir-202021214-e-project-2-regression-challenge)
-4. Review the [data description](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt).
-
-## The Modeling Process
-
-1. The train dataset has all of the columns that you will need to generate and refine your models. The test dataset has all of those columns except for the target that you are trying to predict in your Regression model.
-2. Generate your regression model using the training data. We expect that within this process, you'll be making use of:
-    - train-test split
-    - cross-validation / grid searching for hyperparameters
-    - strong exploratory data analysis to question correlation and relationship across predictive variables
-    - code that reproducibly and consistently applies feature transformation (such as the preprocessing library)
-3. Predict the values for your target column in the test dataset and submit your predictions to Kaggle to see how your model does against unknown data.
-    - **Note**: Kaggle expects to see your submissions in a specific format. Check the challenge's page to make sure you are formatting your CSVs correctly!
-    - **You are limited to models you've learned in class**. In other words, you cannot use XGBoost, Neural Networks or any other advanced model for this project.
-4. Evaluate your models!
-    - consider your evaluation metrics
-    - consider your baseline score
-    - how can your model be used for inference?
-    - why do you believe your model will generalize to new data?
-
-## Submission
-
-Materials must be submitted by **10:00 am EST on Tuesday, January 19**.
-
-The deadline for the Kaggle competition will be **10:00 am EST on Tuesday, January 19**.
-
-Your technical report will be hosted on Github Enterprise. Make sure it includes:
-
-- A README.md (that isn't this file)
-- Jupyter notebook(s) with your analysis and models (renamed to describe your project)
-- At least one successful prediction submission on [DSIR-20201214-E Regression Challenge](https://www.kaggle.com/c/dsir-202021214-e-project-2-regression-challenge) --  you should see your name in the "[Leaderboard](https://www.kaggle.com/c/dsir-202021214-e-project-2-regression-challenge/leaderboard)" tab.
-- Data files
-- Presentation slides
-- Any other necessary files (images, etc.)
-
-**Check with your local instructor for how they would like you to submit your repo for review.**
-
----
-
-## Presentation Structure
-
-- **Must be within time limit established by local instructor.**
-- Use Google Slides or some other visual aid (Keynote, Powerpoint, etc).
-- Consider the audience. **Check with your local instructor for direction**.
-- Start with the **data science problem**.
-- Use visuals that are appropriately scaled and interpretable.
-- Talk about your procedure/methodology (high level).
-- Talk about your primary findings.
-- Make sure you provide **clear recommendations** that follow logically from your analyses and narrative and answer your data science problem.
-
-Be sure to rehearse and time your presentation before class.
-
----
-
-## Rubric
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-**Scores will be out of 27 points based on the 9 items in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
-
-### The Data Science Process
-
-**Problem Statement**
-- Is it clear what the student plans to do?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Cleaning and EDA**
-- Are missing values imputed appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Are categorical variables one-hot encoded?
-- Does the student investigate or manufacture features with linear relationships to the target?
-- Have the data been scaled appropriately?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student utilize feature selection to remove noisy or multi-collinear features?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** linear regression, lasso, and ridge)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Is more than one metric utilized in order to better assess performance?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-In order to pass the project, students must earn a minimum score of 1 for each category.
-- Earning below a 1 in one or more of the above categories would result in a failing project.
-- While a minimum of 1 in each category is the required threshold for graduation, students should aim to earn at least an average of 1.5 across each category. An average score below 1.5, while it may be passing, means students may want to solicit specific feedback in order to significantly improve the project before showcasing it as part of a portfolio or the job search.
-
-### REMEMBER:
-
-This is a learning environment and you are encouraged to try new things, even if they don't work out as well as you planned! While this rubric outlines what we look for in a _good_ project, it is up to you to go above and beyond to create a _great_ project. **Learn from your failures and you'll be prepared to succeed in the workforce**.
+I plan to generalize this model outside of Ames, Iowa by accruing more home appraisal information from a larger geographical region. In doing so, I could rely less on the particular local neighborhood locations when making my final my final prediction for home price. However, the company would need to be sure that they were going to continue using this home appraisal checklist as their standard for the near future because my model is restricted to predicting home price based on the exact features provided in this checklist.
+Therefore, a more immediate next step would be to identify whether there is a better appraisal checklist the company could use for assessing home value. To determine this, I would build a separate model utilizing another company's checklist and determine whether I can achieve the same predictive accuracy at a similar level of efficiency. 
