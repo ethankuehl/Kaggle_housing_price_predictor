@@ -6,7 +6,7 @@
 
 ## Background
 
-Real Estate appraisal has become a standardized practice in the home market. However, the influence of [socioeconomic and demographic factors](https://www.nytimes.com/2020/08/25/realestate/blacks-minorities-appraisals-discrimination.html) on an appraiser's final evaluation has recently called lead to questions as to whether this practice is truly objective. My project aims to provide an an accurate and objective measure of a home's value for an appraiser to take into consideration when evaluating the price of a home.  
+Real Estate appraisal is a standardized practice in the home market. However, the correlation between [socioeconomic and demographic factors](https://www.nytimes.com/2020/08/25/realestate/blacks-minorities-appraisals-discrimination.html) on an appraiser's final evaluation for a home has recently lead to questions as to whether this practice is truly objective. My project aims to provide an an accurate and objective measure of a home's value for an appraiser to take into consideration when evaluating the price of a home.  
 
 ## Data 
 [Ames, Iowa Housing dataset](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt) provides a checklist of features home appraisers utilize to determine a home's final value along with the price the home sold at.
