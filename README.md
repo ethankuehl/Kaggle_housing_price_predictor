@@ -21,18 +21,6 @@ Real Estate appraisal is a standardized practice in the home market. However, th
 ![outlier_identification](./figures/neighborhood_average_price.png)
 * This bar chart highlights the importance of location on the sale price of a home. 
 
-project-2
-|__ code
-|   |__ 01_EDA_and_Cleaning.ipynb   
-|   |__ 02_Modeling.ipynb   
-|   |__ 03_Conclusions_and_Recommendations.ipynb
-|__ datasets
-|   |__ train.csv
-|   |__ test.csv
-|   |__ output
-|__ figures
-|__ presentation.pdf
-|__ README.md
 
 ## Summary
 * EDA and Data Cleaning
